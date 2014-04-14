@@ -1,21 +1,20 @@
 from selenium import webdriver
+import unittest
 
-#Kevin has a need of a web based todo system
-browser = webdriver.Firefox()
-#He has found one here
-browser.get('http://localhost:8000')
-#As has the word to-do in the title
-assert 'to-do' in browser.title
-#He is invited to enter a todo item, straight away
 
-#When he has entered the item the list is updated
+class NewVisitorTest(unittest.TestCase):
 
-#And there is a text box for another item.
+    def setUp(self):
+        self.browser = webdriver.Firefox()
 
-#He goes away
+    def tearDown(self):
+        self.browser.quit()
 
-#Worries that the item is gone, comes back
+    def test_can_start_a_list_and_retrieve_it_later(self):
+        self.browser.get('http://localhost:8000')
+        self.assertIn('To-Do', self.browser.title)
+        self.fail('Finish the test!')
 
-#Satisfied that it is there he goes back away
 
-browser.quit()
+if __name__ == '__main__':
+    unittest.main(warnings='ignore')
