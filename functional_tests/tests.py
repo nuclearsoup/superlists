@@ -43,6 +43,9 @@ class NewVisitorTest(LiveServerTestCase):
         inputbox.send_keys('Buy peacock feathers')
         inputbox.send_keys(Keys.ENTER)
 
+        edith_list_url = self.browser.current_url
+
+        self.assertRegex(edith_list_url, '/lists/.+')
         self.check_for_row_in_list_table('1: Buy peacock feathers')
 
         # Being methodical she enters a second item:
@@ -52,11 +55,47 @@ class NewVisitorTest(LiveServerTestCase):
         inputbox.send_keys('Use feathers to make fly')
         inputbox.send_keys(Keys.ENTER)
 
+        # Edith wonders whether the site will remember her list. Then she sees
+        # that the site has generate a unique URL for her -- there is some
+        # explanatory text to that effect.
+
         self.check_for_row_in_list_table('1: Buy peacock feathers')
         self.check_for_row_in_list_table('2: Use feathers to make fly')
 
-        self.fail('Finish the test!')
+        # Now a new user, Francis, comes along to the site.
 
+        # We use a new browser session to ensure none of Edith's is
+        # coming through from cookies etc.
+
+        self.browser.quit()
+        self.browser = webdriver.Firefox()
+
+        # Francis visits the site, there is no sign of edith's list
+
+        self.browser.get(self.live_server_url)
+        page_text = self.browser.find_elements_by_tag_name('body').text
+        self.assertNotIn('Buy peacock feathers', page_text)
+        self.assertNotIn('Use feathers to make fly', page_text)
+
+        # Francis starts a new list by entering an item
+
+        inputbox = self.browser.find_element_by_id('id_new_item')
+        inputbox.send_keys('Buy milk')
+        inputbox.send_keys(Keys.ENTER)
+
+        # Francis gets his own unique url.
+
+        francis_list_url = self.browser.current_url
+        self.assertRegex(edith_list_url, '/lists/.+')
+        self.assertNotEqual(francis_list_url, edith_list_url)
+
+        page_text = self.browser.find_elements_by_tag_name('body').text
+        self.assertNotIn('Buy peacock feathers', page_text)
+        self.assertIn('Buy milk', page_text)
+        self.fail('Finish the test!')
+        # She visits that URL - her to-do list is still there.
+
+        # Satisfied, she goes back to sleep
 
 if __name__ == '__main__':
     unittest.main(warnings='ignore')
