@@ -1,7 +1,9 @@
+import time
 from django.test import LiveServerTestCase
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 import unittest
+
 
 
 class NewVisitorTest(LiveServerTestCase):
@@ -41,13 +43,12 @@ class NewVisitorTest(LiveServerTestCase):
         # "1: Buy peacock feathers" as an item in a to-do list table
 
         inputbox.send_keys('Buy peacock feathers')
+ 
         inputbox.send_keys(Keys.ENTER)
-
         edith_list_url = self.browser.current_url
-
         self.assertRegex(edith_list_url, '/lists/.+')
         self.check_for_row_in_list_table('1: Buy peacock feathers')
-
+        
         # Being methodical she enters a second item:
         # Use feathers to make fly
 
