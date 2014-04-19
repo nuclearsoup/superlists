@@ -5,7 +5,6 @@ from selenium.webdriver.common.keys import Keys
 import unittest
 
 
-
 class NewVisitorTest(LiveServerTestCase):
 
     def setUp(self):
