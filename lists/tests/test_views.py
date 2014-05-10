@@ -19,35 +19,6 @@ class HomePageTest(TestCase):
         self.assertTrue(response.content.decode(), expected_html)
 
 
-class ListAndItemModelTest(TestCase):
-    def test_saving_and_retrieving_items(self):
-        list_ = List()
-        list_.save()
-
-        first_item = Item()
-        first_item.text = 'The first (ever) item.'
-        first_item.list = list_
-        first_item.save()
-
-        second_item = Item()
-        second_item.text = 'Item the second.'
-        second_item.list = list_
-        second_item.save()
-
-        saved_list = List.objects.first()
-        self.assertEqual(saved_list, list_)
-
-        saved_items = Item.objects.all()
-        self.assertEqual(saved_items.count(), 2)
-
-        first_saved_item = saved_items[0]
-        second_saved_item = saved_items[1]
-        self.assertEqual(first_saved_item.text, 'The first (ever) item.')
-        self.assertEqual(first_saved_item.list, list_)
-        self.assertEqual(second_saved_item.text, 'Item the second.')
-        self.assertEqual(second_saved_item.list, list_)
-
-
 class ListViewTest(TestCase):
 
     def test_uses_list_template(self):
@@ -62,7 +33,7 @@ class ListViewTest(TestCase):
         other_list = List.objects.create()
         Item.objects.create(text='other list item 1', list=other_list)
         Item.objects.create(text='other list item 2', list=other_list)
- 
+
         response = self.client.get('/lists/%d/' % (correct_list.id,))
 
         self.assertContains(response, 'itemey 1')
@@ -75,7 +46,7 @@ class ListViewTest(TestCase):
         correct_list = List.objects.create()
         response = self.client.get('/lists/%d/' % (correct_list.id,))
         self.assertEqual(response.context['list'], correct_list)
-            
+
 
 class NewListTest(TestCase):
 
