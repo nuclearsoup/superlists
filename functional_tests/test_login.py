@@ -5,7 +5,7 @@ from selenium.webdriver.support.ui import WebDriverWait
 class LoginTest(FunctionalTest):
 
     def switch_to_new_window(self, text_in_title):
-        retries = 60
+        retries = 2
         while retries > 0:
             for handle in self.browser.window_handles:
                 self.browser.switch_to_window(handle)
@@ -23,7 +23,7 @@ class LoginTest(FunctionalTest):
     def test_login_with_persona(self):
         # Edith goes to to site and notices login link
         self.browser.get(self.server_url)
-        self.browser.find_element_by_id('login').click()
+        self.browser.find_element_by_id('id_login').click()
         # A persona login window appearsa
         self.switch_to_new_window('Mozilla Persona')
         # Edith signs in with her email address
@@ -37,6 +37,6 @@ class LoginTest(FunctionalTest):
         self.switch_to_new_window('To-Do')
 
         # She can see that she is logged in
-        self.wait_for_element_with_id('logout')
+        self.wait_for_element_with_id('id_logout')
         navbar = self.browser.find_element_by_css_selector('.navbar')
         self.assertContains('edith@mockmyid.com', navbar.text)
