@@ -39,4 +39,4 @@ class LoginTest(FunctionalTest):
         # She can see that she is logged in
         self.wait_for_element_with_id('id_logout')
         navbar = self.browser.find_element_by_css_selector('.navbar')
-        self.assertContains('edith@mockmyid.com', navbar.text)
+        self.assertIn('edith@mockmyid.com', navbar.text)
